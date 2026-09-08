@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.launchdarkly.sdk.android.LDClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
@@ -31,17 +30,17 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun ButtonCopyScreen() {
-    var client by remember { mutableStateOf<LDClient?>(null) }
+    var flags by remember { mutableStateOf<FeatureFlags?>(null) }
     var buttonLabel by remember { mutableStateOf("Loading…") }
     var tapCount by remember { mutableIntStateOf(0) }
 
-    // Await SDK initialization off the main thread, then read the flag once ready.
+    // Await the first payload off the main thread, then read the flag once ready.
     LaunchedEffect(Unit) {
         withContext(Dispatchers.IO) {
-            val ldClient = LDApplication.clientFuture.get(5, TimeUnit.SECONDS)
+            val ready = LDApplication.flagsFuture.get(5, TimeUnit.SECONDS)
             withContext(Dispatchers.Main) {
-                client = ldClient
-                buttonLabel = ldClient.stringVariation(Config.FLAG_KEY, "Get started")
+                flags = ready
+                buttonLabel = ready.stringVariation(Config.FLAG_KEY, "Get started")
             }
         }
     }
@@ -55,10 +54,10 @@ fun ButtonCopyScreen() {
     ) {
         Button(
             onClick = {
-                client?.track(Config.METRIC_KEY)
+                flags?.track(Config.METRIC_KEY)
                 tapCount++
             },
-            enabled = client != null,
+            enabled = flags != null,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp),
@@ -69,13 +68,13 @@ fun ButtonCopyScreen() {
         Spacer(Modifier.height(16.dp))
 
         // Snippet-style View button — uses configureExperimentButton() from ExperimentButton.kt.
-        // Rendered only after the SDK is ready so LDClient.get() is non-null inside the snippet.
-        if (client != null) {
+        // Rendered only once flag values are available.
+        flags?.let { ready ->
             AndroidView(
                 modifier = Modifier.fillMaxWidth(),
                 factory = { ctx ->
                     android.widget.Button(ctx).also { btn ->
-                        configureExperimentButton(btn) { tapCount++ }
+                        configureExperimentButton(ready, btn) { tapCount++ }
                     }
                 },
             )

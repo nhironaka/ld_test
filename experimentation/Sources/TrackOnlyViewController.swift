@@ -1,11 +1,10 @@
 import UIKit
-import LaunchDarkly
 
 // Demonstrates: track-only.snippet.md
 //
 // Use case: you already have flag evaluation in place and just want to
 // add conversion tracking. No flag variation is read here — you're only
-// funneling a metric event into the LaunchDarkly experiment pipeline.
+// funneling a metric event into the experiment pipeline.
 class TrackOnlyViewController: UIViewController {
 
     private let statusLabel  = UILabel()
@@ -61,10 +60,8 @@ class TrackOnlyViewController: UIViewController {
 }
 
 // ── Snippet: track-only.snippet.md ── trackMetric() ────────────────
-// Verbatim except metricKey default removed (this file calls with Config.metricKey).
 // Call trackMetric when a metric action occurs in your app —
 // a tap, a form submit, a screen view, a custom event, whatever your metric measures.
-func trackMetric(metricKey: String, data: LDValue = .null) {
-    let client = LDClient.get()!
-    client.track(key: metricKey, data: data)
+func trackMetric(metricKey: String, data: [String: Any]? = nil) {
+    Flags.shared.track(key: metricKey, data: data)
 }

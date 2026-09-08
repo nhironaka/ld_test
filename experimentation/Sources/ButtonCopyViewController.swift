@@ -1,5 +1,4 @@
 import UIKit
-import LaunchDarkly
 
 // Demonstrates: button-copy.snippet.md
 //
@@ -28,9 +27,9 @@ class ButtonCopyViewController: UIViewController {
         setupUI()
 
         NotificationCenter.default.addObserver(
-            self, selector: #selector(sdkReady), name: .ldInitialized, object: nil)
-        // Wire the experiment button once the SDK is ready.
-        if LDClient.get() != nil {
+            self, selector: #selector(flagsReady), name: .flagsReady, object: nil)
+        // Wire the experiment button once flag values are available.
+        if Flags.shared.isReady {
             configureExperimentButton(experimentButton) { [weak self] in self?.onExperimentTap() }
         }
     }
@@ -82,7 +81,7 @@ class ButtonCopyViewController: UIViewController {
         ])
     }
 
-    @objc private func sdkReady() {
+    @objc private func flagsReady() {
         configureExperimentButton(experimentButton) { [weak self] in self?.onExperimentTap() }
     }
 
@@ -101,7 +100,7 @@ class ButtonCopyViewController: UIViewController {
 //
 // Configures a UIButton to display the assigned variation's title and track taps.
 // Pass your existing button instance to wire it up without changing your layout.
-// Call this after startLaunchDarkly() and after identify() resolves (if the user
+// Call this after startFeatureFlags() and after identify() resolves (if the user
 // became known mid-session).
 //
 // Prerequisites:
@@ -112,12 +111,12 @@ class ButtonCopyViewController: UIViewController {
 // Requires iOS 14+. For iOS 13 support, replace UIAction with addTarget(_:action:for:).
 @available(iOS 14.0, *)
 func configureExperimentButton(_ button: UIButton, onTap: (() -> Void)? = nil) {
-    let client = LDClient.get()!
+    let flags = Flags.shared
 
     // The flag value is the button title. The default is shown when the flag is off
-    // or the SDK hasn't finished initializing yet.
-    // Don't cache the result — LaunchDarkly deduplicates exposure events automatically.
-    let label = client.stringVariation(forKey: Config.flagKey, defaultValue: "Get started")
+    // or values haven't arrived yet.
+    // Don't cache the result — exposure events are expected to be deduplicated for us.
+    let label = flags.stringVariation(forKey: Config.flagKey, defaultValue: "Get started")
     // UIButton.Configuration (iOS 15+) ignores setTitle(_:for:). Detect and handle both.
     if #available(iOS 15, *), button.configuration != nil {
         button.configuration?.title = label
@@ -131,10 +130,10 @@ func configureExperimentButton(_ button: UIButton, onTap: (() -> Void)? = nil) {
     button.removeAction(identifiedBy: actionID, for: .touchUpInside)
 
     let action = UIAction(identifier: actionID) { _ in
-        // Track the tap so LaunchDarkly can attribute it to the right variation.
-        // Use the same context that was active during the flag evaluation above —
-        // mismatched contexts break conversion attribution.
-        client.track(key: Config.metricKey)
+        // Track the tap so it can be attributed to the right variation.
+        // This must use the same context that was active during the flag evaluation
+        // above — mismatched contexts break conversion attribution.
+        flags.track(key: Config.metricKey)
         onTap?()
     }
     button.addAction(action, for: .touchUpInside)

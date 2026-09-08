@@ -9,10 +9,10 @@
 /* Begin PBXBuildFile section */
 		1A519192CC9B68EF282610A5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED0DD4397383F2B302F5870C /* AppDelegate.swift */; };
 		225EDD0ACB188A5CA25E7AFF /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CE3892392F04F308B86413E /* Config.swift */; };
-		4C88ACEA6010935EB07BF8BE /* LaunchDarkly in Frameworks */ = {isa = PBXBuildFile; productRef = EE87604996F24C6CF8CB444D /* LaunchDarkly */; };
 		4D6B3FFA650DB4990F1EE7AD /* ButtonCopyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 857EA6E1D774B9783CADD4C2 /* ButtonCopyViewController.swift */; };
 		C1384671097EC4FA195CD138 /* FullExperimentationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A3FBB453F1EA8DAE320062 /* FullExperimentationViewController.swift */; };
 		D999F5864EFB02B9AE2FDDC9 /* TrackOnlyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D886B5FB4EC3ACE752082597 /* TrackOnlyViewController.swift */; };
+		F26FC9584BBAA10DE40D4DAC /* FeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDF18CF76470BFD8B0132692 /* FeatureFlags.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,18 +23,8 @@
 		857EA6E1D774B9783CADD4C2 /* ButtonCopyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonCopyViewController.swift; sourceTree = "<group>"; };
 		D886B5FB4EC3ACE752082597 /* TrackOnlyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackOnlyViewController.swift; sourceTree = "<group>"; };
 		ED0DD4397383F2B302F5870C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		EDF18CF76470BFD8B0132692 /* FeatureFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlags.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFrameworksBuildPhase section */
-		4185974FB82D997D67CB6BB6 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4C88ACEA6010935EB07BF8BE /* LaunchDarkly in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		31E6B89F4EFBAA35EECC6120 /* Products */ = {
@@ -51,6 +41,7 @@
 				ED0DD4397383F2B302F5870C /* AppDelegate.swift */,
 				857EA6E1D774B9783CADD4C2 /* ButtonCopyViewController.swift */,
 				2CE3892392F04F308B86413E /* Config.swift */,
+				EDF18CF76470BFD8B0132692 /* FeatureFlags.swift */,
 				39A3FBB453F1EA8DAE320062 /* FullExperimentationViewController.swift */,
 				06946BD32B5BBC5146E393E9 /* Info.plist */,
 				D886B5FB4EC3ACE752082597 /* TrackOnlyViewController.swift */,
@@ -74,7 +65,6 @@
 			buildConfigurationList = 3D57BC16A18C03317EC7D76F /* Build configuration list for PBXNativeTarget "ExperimentationDemo" */;
 			buildPhases = (
 				09DF89C66F8E11440E1B19A4 /* Sources */,
-				4185974FB82D997D67CB6BB6 /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -82,7 +72,6 @@
 			);
 			name = ExperimentationDemo;
 			packageProductDependencies = (
-				EE87604996F24C6CF8CB444D /* LaunchDarkly */,
 			);
 			productName = ExperimentationDemo;
 			productReference = 2361311D1939776EE3379DEE /* ExperimentationDemo.app */;
@@ -108,9 +97,6 @@
 			);
 			mainGroup = E68FDC11ECFD88F8F29E54BD;
 			minimizedProjectReferenceProxies = 1;
-			packageReferences = (
-				5C433C7392F2845B1367DA6C /* XCRemoteSwiftPackageReference "ios-client-sdk" */,
-			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 31E6B89F4EFBAA35EECC6120 /* Products */;
 			projectDirPath = "";
@@ -129,6 +115,7 @@
 				1A519192CC9B68EF282610A5 /* AppDelegate.swift in Sources */,
 				4D6B3FFA650DB4990F1EE7AD /* ButtonCopyViewController.swift in Sources */,
 				225EDD0ACB188A5CA25E7AFF /* Config.swift in Sources */,
+				F26FC9584BBAA10DE40D4DAC /* FeatureFlags.swift in Sources */,
 				C1384671097EC4FA195CD138 /* FullExperimentationViewController.swift in Sources */,
 				D999F5864EFB02B9AE2FDDC9 /* TrackOnlyViewController.swift in Sources */,
 			);
@@ -314,25 +301,6 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		5C433C7392F2845B1367DA6C /* XCRemoteSwiftPackageReference "ios-client-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/launchdarkly/ios-client-sdk";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 11.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		EE87604996F24C6CF8CB444D /* LaunchDarkly */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 5C433C7392F2845B1367DA6C /* XCRemoteSwiftPackageReference "ios-client-sdk" */;
-			productName = LaunchDarkly;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = FF9972CAE20615260C09D4C2 /* Project object */;
 }

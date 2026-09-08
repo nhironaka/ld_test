@@ -1,10 +1,9 @@
 import UIKit
-import LaunchDarkly
 
 // Demonstrates: full.snippet.md
 //
 // Shows the three-step experimentation lifecycle:
-//  1. SDK is already initialized by AppDelegate (startLaunchDarkly).
+//  1. Flags are already started by AppDelegate (startFeatureFlags).
 //  2. "Identify User" simulates a login — calls onUserBecomesEligible
 //     which identifies the new context and evaluates the flag.
 //  3. "Track Conversion" fires the metric event for the active variant.
@@ -22,9 +21,9 @@ class FullExperimentationViewController: UIViewController {
         view.backgroundColor = .systemBackground
         setupUI()
         NotificationCenter.default.addObserver(
-            self, selector: #selector(sdkReady), name: .ldInitialized, object: nil)
+            self, selector: #selector(flagsReady), name: .flagsReady, object: nil)
         NotificationCenter.default.addObserver(
-            self, selector: #selector(variantChanged(_:)), name: .ldVariantChanged, object: nil)
+            self, selector: #selector(variantChanged(_:)), name: .variantChanged, object: nil)
     }
 
     private func setupUI() {
@@ -70,24 +69,25 @@ class FullExperimentationViewController: UIViewController {
     @objc private func identifyTapped() {
         log("→ identify(\(Config.userEmail))")
         onUserBecomesEligible(finalUserKey: Config.userEmail)
-        LDClient.get()?.flush()
+        Flags.shared.flush()
         log("→ flush()")
     }
 
     @objc private func trackConversionTapped() {
         // Mirrors the trackMetric helper from full.snippet.md.
-        guard let client = LDClient.get() else {
-            log("⚠ LDClient not ready — tap Identify first")
+        let flags = Flags.shared
+        guard flags.isReady else {
+            log("⚠ flags not ready — tap Identify first")
             return
         }
-        client.track(key: Config.metricKey)
+        flags.track(key: Config.metricKey)
         log("→ track('\(Config.metricKey)') for variant '\(currentVariant)'")
-        client.flush()
+        flags.flush()
         log("→ flush()")
     }
 
-    @objc private func sdkReady() {
-        log("✓ SDK initialized")
+    @objc private func flagsReady() {
+        log("✓ flags ready")
     }
 
     @objc private func variantChanged(_ note: Notification) {
@@ -112,21 +112,16 @@ class FullExperimentationViewController: UIViewController {
 //   • applyVariant() posts a Notification so the VC can update its UI
 //     (in a real app, applyVariant would directly update your view layer)
 func onUserBecomesEligible(finalUserKey: String) {
-    let client = LDClient.get()!
+    let flags = Flags.shared
 
-    // Update to the final context used for experiment eligibility.
-    // Use the logged-in user's ID so experiment assignment stays consistent.
-    var contextBuilder = LDContextBuilder(key: finalUserKey)
-    contextBuilder.kind("user")
-    contextBuilder.trySetValue("email", .string(finalUserKey))
-    guard case .success(let updated) = contextBuilder.build() else { return }
-
-    client.identify(context: updated, completion: {
+    // Switch to the final context used for experiment eligibility. Use the
+    // logged-in user's ID so experiment assignment stays consistent.
+    flags.identify(userKey: finalUserKey) {
         // Evaluate the experiment flag where the user encounters the experience,
         // after identify completes.
-        let variant = client.stringVariation(forKey: Config.flagKey, defaultValue: "control")
+        let variant = flags.stringVariation(forKey: Config.flagKey, defaultValue: "control")
         applyVariant(variant)
-    })
+    }
 }
 
 // applyVariant is user-defined — implement it to apply the variation to your UI.
@@ -134,7 +129,7 @@ func onUserBecomesEligible(finalUserKey: String) {
 func applyVariant(_ variant: String) {
     DispatchQueue.main.async {
         NotificationCenter.default.post(
-            name: .ldVariantChanged,
+            name: .variantChanged,
             object: nil,
             userInfo: ["variant": variant]
         )

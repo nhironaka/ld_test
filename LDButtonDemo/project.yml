@@ -5,11 +5,6 @@ options:
     iOS: "16.0"
   createIntermediateGroups: true
 
-packages:
-  LaunchDarkly:
-    url: https://github.com/launchdarkly/ios-client-sdk
-    from: "11.0.0"
-
 targets:
   LDButtonDemo:
     type: application
@@ -24,8 +19,6 @@ targets:
         CFBundleIdentifier: com.launchdarkly.LDButtonDemo
         CFBundleVersion: "1"
         CFBundleShortVersionString: "1.0"
-    dependencies:
-      - package: LaunchDarkly
     settings:
       base:
         SWIFT_VERSION: "5.9"

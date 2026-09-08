@@ -7,30 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		40A20381EFE1F4BFD06E0286 /* FeatureFlags.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A3871436CFCCC8F12C5E3EF /* FeatureFlags.swift */; };
 		6BCE4F23CCDC1BE3034B7C0E /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C99FD357409FDA990776A8 /* Config.swift */; };
 		7932060876E28BF95C8BC2FE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 769CFEB5D81F82D20C27473D /* ViewController.swift */; };
-		FEB2F053C2DE168DA91B6586 /* LaunchDarkly in Frameworks */ = {isa = PBXBuildFile; productRef = 74075113F112194748D4B0FF /* LaunchDarkly */; };
 		FFD48FB629B3C63BF677A3DF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD78F63D02A4B9E6A2587F44 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3A3871436CFCCC8F12C5E3EF /* FeatureFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureFlags.swift; sourceTree = "<group>"; };
 		3DD6EFE0AC8C84996CED2585 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		58C99FD357409FDA990776A8 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		625C936ED60334B67D8C87D7 /* LDButtonDemo.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LDButtonDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		769CFEB5D81F82D20C27473D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		BD78F63D02A4B9E6A2587F44 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFrameworksBuildPhase section */
-		8828C44E169DC18AF013EAF9 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FEB2F053C2DE168DA91B6586 /* LaunchDarkly in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		16B6593C2DD88BC999E16EEE = {
@@ -46,6 +36,7 @@
 			children = (
 				BD78F63D02A4B9E6A2587F44 /* AppDelegate.swift */,
 				58C99FD357409FDA990776A8 /* Config.swift */,
+				3A3871436CFCCC8F12C5E3EF /* FeatureFlags.swift */,
 				3DD6EFE0AC8C84996CED2585 /* Info.plist */,
 				769CFEB5D81F82D20C27473D /* ViewController.swift */,
 			);
@@ -68,7 +59,6 @@
 			buildConfigurationList = 49BBD50827281CD6308FEA0B /* Build configuration list for PBXNativeTarget "LDButtonDemo" */;
 			buildPhases = (
 				91D30BD8EA87744334D97A93 /* Sources */,
-				8828C44E169DC18AF013EAF9 /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -76,7 +66,6 @@
 			);
 			name = LDButtonDemo;
 			packageProductDependencies = (
-				74075113F112194748D4B0FF /* LaunchDarkly */,
 			);
 			productName = LDButtonDemo;
 			productReference = 625C936ED60334B67D8C87D7 /* LDButtonDemo.app */;
@@ -102,9 +91,6 @@
 			);
 			mainGroup = 16B6593C2DD88BC999E16EEE;
 			minimizedProjectReferenceProxies = 1;
-			packageReferences = (
-				42DD040F0E5C51969016180B /* XCRemoteSwiftPackageReference "ios-client-sdk" */,
-			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A46758300DFC0B49556A67C8 /* Products */;
 			projectDirPath = "";
@@ -122,6 +108,7 @@
 			files = (
 				FFD48FB629B3C63BF677A3DF /* AppDelegate.swift in Sources */,
 				6BCE4F23CCDC1BE3034B7C0E /* Config.swift in Sources */,
+				40A20381EFE1F4BFD06E0286 /* FeatureFlags.swift in Sources */,
 				7932060876E28BF95C8BC2FE /* ViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -306,25 +293,6 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		42DD040F0E5C51969016180B /* XCRemoteSwiftPackageReference "ios-client-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/launchdarkly/ios-client-sdk";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 11.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		74075113F112194748D4B0FF /* LaunchDarkly */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 42DD040F0E5C51969016180B /* XCRemoteSwiftPackageReference "ios-client-sdk" */;
-			productName = LaunchDarkly;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E0413A1F4D4D4072E6241116 /* Project object */;
 }

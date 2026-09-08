@@ -3,11 +3,21 @@
 Three-tab UIKit app that exercises the three iOS experimentation snippets
 so you can validate them on a real Simulator.
 
+**The LaunchDarkly SDK has been removed from this app.** It is now an install
+fixture: the three snippet functions still exist and are still called from the
+UI, but they route through the `FeatureFlags` protocol in
+`Sources/FeatureFlags.swift`, whose default implementation returns each
+caller's own fallback and drops every event. Installing the SDK means backing
+that protocol with a real client.
+
+The working integration is preserved in git — see the repo root README for how
+to diff against it.
+
 ## Tabs
 
 | Tab | Snippet | What it validates |
 |-----|---------|-------------------|
-| Track Only | `track-only.snippet.md` | SDK init + `trackMetric` |
+| Track Only | `track-only.snippet.md` | client init + `trackMetric` |
 | Full Exp | `full.snippet.md` | identify → flag eval → metric |
 | Button Copy | `button-copy.snippet.md` | flag-driven button title + tap tracking |
 
@@ -36,12 +46,24 @@ xcodegen generate
 open ExperimentationDemo.xcodeproj
 ```
 
-Select an iPhone Simulator target and press ▶. The first launch resolves the
-LaunchDarkly Swift Package (~1 min on first run).
+Select an iPhone Simulator target and press ▶. There are no external package
+dependencies, so the build is fast.
+
+To build from the command line:
+
+```sh
+xcodebuild -project ExperimentationDemo.xcodeproj -scheme ExperimentationDemo \
+  -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' build
+```
 
 ---
 
 ## Bugs / issues found in the snippets
+
+These were found while the SDK was still wired up, against the LaunchDarkly
+docs snippets. They are kept here because they are findings about the docs, not
+about this app — the code examples below show the SDK calls as they were at the
+time.
 
 ### Bug 1 — `button-copy`: `setTitle` silent no-op with `UIButton.Configuration` (iOS 15+)
 

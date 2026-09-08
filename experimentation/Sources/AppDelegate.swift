@@ -1,5 +1,4 @@
 import UIKit
-import LaunchDarkly
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -7,13 +6,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        startLaunchDarkly()
+        startFeatureFlags()
 
         let tabs = UITabBarController()
         tabs.viewControllers = [
-            inNav(TrackOnlyViewController(),         title: "Track Only",  icon: "chart.bar"),
-            inNav(FullExperimentationViewController(), title: "Full Exp",  icon: "flask"),
-            inNav(ButtonCopyViewController(),         title: "Button Copy", icon: "hand.tap"),
+            inNav(TrackOnlyViewController(),           title: "Track Only",  icon: "chart.bar"),
+            inNav(FullExperimentationViewController(), title: "Full Exp",    icon: "flask"),
+            inNav(ButtonCopyViewController(),          title: "Button Copy", icon: "hand.tap"),
         ]
 
         window = UIWindow(frame: UIScreen.main.bounds)
@@ -28,27 +27,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
-// ── Snippet: track-only.snippet.md ── startLaunchDarkly() ──────────
-// Lightly adapted: replaced "YOUR_MOBILE_KEY" with Config.mobileKey.
+// ── startFeatureFlags() ────────────────────────────────────────────
 // Call this once from your app startup.
-func startLaunchDarkly() {
-    let config = LDConfig(mobileKey: Config.mobileKey, autoEnvAttributes: .enabled)
-    var contextBuilder = LDContextBuilder(key: Config.userEmail)
-    contextBuilder.kind("user")
-    contextBuilder.trySetValue("email", .string(Config.userEmail))
-    guard case .success(let context) = contextBuilder.build() else { return }
-
-    LDClient.start(config: config, context: context, startWaitSeconds: 5) { timedOut in
-        if timedOut {
-            print("LD: SDK didn't initialize in 5 seconds. Still running.")
-        } else {
-            print("LD: SDK successfully initialized with the latest flags.")
-        }
-        NotificationCenter.default.post(name: .ldInitialized, object: nil)
-    }
-}
-
-extension Notification.Name {
-    static let ldInitialized    = Notification.Name("ldInitialized")
-    static let ldVariantChanged = Notification.Name("ldVariantChanged")
+//
+// The user key identifies the current user so targeting rules can assign them
+// to the correct experiment variation. It must be stable per user.
+func startFeatureFlags() {
+    Flags.configure(StaticFeatureFlags())
+    Flags.shared.start(userKey: Config.userEmail, timeoutSeconds: 5)
 }

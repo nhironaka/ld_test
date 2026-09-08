@@ -1,15 +1,14 @@
 import UIKit
-import LaunchDarkly
 
-// Demonstrates a minimal LaunchDarkly button-copy experiment.
+// Demonstrates a minimal button-copy experiment.
 //
 // Flow:
-//   1. On load the button shows "Loading…" until the SDK is ready.
-//   2. Once .ldInitialized fires (or the client is already available),
+//   1. On load the button shows "Loading…" until flag values are available.
+//   2. Once .flagsReady fires (or values are already available),
 //      updateButton() reads the string flag and sets it as the button title.
-//      LaunchDarkly records an exposure event automatically at this point.
-//   3. Each tap calls client.track(key:) to record a conversion event,
-//      which LaunchDarkly uses to compute the experiment's conversion rate.
+//      An exposure is expected to be recorded at this point.
+//   3. Each tap calls track(key:) to record a conversion event, which is what
+//      an experiment's conversion rate is computed from.
 class ViewController: UIViewController {
 
     // Use .custom (not a UIButton.Configuration) so that setTitle(_:for:)
@@ -24,14 +23,14 @@ class ViewController: UIViewController {
         view.backgroundColor = .systemBackground
         setupUI()
 
-        // Listen for the SDK-ready notification posted by startLaunchDarkly().
-        // This handles the normal startup path where the SDK finishes after viewDidLoad.
+        // Listen for the ready notification posted by startFeatureFlags().
+        // This handles the normal startup path where values arrive after viewDidLoad.
         NotificationCenter.default.addObserver(
-            self, selector: #selector(sdkReady), name: .ldInitialized, object: nil)
+            self, selector: #selector(flagsReady), name: .flagsReady, object: nil)
 
-        // Handle the fast path: SDK already initialized before this VC loaded
+        // Handle the fast path: values already available before this VC loaded
         // (e.g. the view is pushed after a tab switch).
-        if LDClient.get() != nil {
+        if Flags.shared.isReady {
             updateButton()
         }
     }
@@ -63,17 +62,17 @@ class ViewController: UIViewController {
         ])
     }
 
-    @objc private func sdkReady() {
+    @objc private func flagsReady() {
         updateButton()
     }
 
     private func updateButton() {
-        guard let client = LDClient.get() else { return }
+        let flags = Flags.shared
 
         // Read the flag value — each variation is a different label string.
-        // Don't cache the result; LaunchDarkly deduplicates exposure events automatically,
-        // so calling stringVariation every time is safe and ensures the latest value.
-        let label = client.stringVariation(forKey: Config.flagKey, defaultValue: "Get started")
+        // Don't cache the result; exposure events are expected to be deduplicated
+        // for us, so re-evaluating every time is safe and picks up the latest value.
+        let label = flags.stringVariation(forKey: Config.flagKey, defaultValue: "Get started")
         experimentButton.setTitle(label, for: .normal)
 
         // Use a stable action identifier so re-calling updateButton() (e.g. after identify())
@@ -81,12 +80,13 @@ class ViewController: UIViewController {
         let actionID = UIAction.Identifier("com.launchdarkly.experimentButton")
         experimentButton.removeAction(identifiedBy: actionID, for: .touchUpInside)
         experimentButton.addAction(UIAction(identifier: actionID) { [weak self] _ in
-            // Track the conversion. Use the same client that was active during flag evaluation
-            // above — mismatched contexts break conversion attribution.
-            client.track(key: Config.metricKey)
-            // Force-flush so events reach LaunchDarkly immediately during testing.
+            // Track the conversion. This must be attributed to the same context that
+            // was active during the flag evaluation above — mismatched contexts break
+            // conversion attribution.
+            flags.track(key: Config.metricKey)
+            // Force-flush so events are delivered immediately during testing.
             // Remove this line before shipping to production.
-            client.flush()
+            flags.flush()
             self?.tapCount += 1
             self?.tapCountLabel.text = "Taps: \(self?.tapCount ?? 0)"
         }, for: .touchUpInside)
