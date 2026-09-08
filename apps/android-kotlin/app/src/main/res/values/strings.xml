@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DarkStore</string>
+    <string name="checkout_variant">Checkout: %1$s</string>
+    <string name="cart_limit">Cart limit: %1$d items</string>
+    <string name="sign_in">Sign in as a pro shopper</string>
+</resources>

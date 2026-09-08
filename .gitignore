@@ -1,0 +1,39 @@
+.DS_Store
+
+# ruby-sinatra
+apps/ruby-sinatra/.bundle/
+apps/ruby-sinatra/vendor/bundle/
+
+# rust-axum
+apps/rust-axum/target/
+
+# dotnet-api
+apps/dotnet-api/bin/
+apps/dotnet-api/obj/
+
+# php-slim
+apps/php-slim/vendor/
+apps/php-slim/.phpunit.cache/
+
+# android-kotlin
+apps/android-kotlin/.gradle/
+apps/android-kotlin/build/
+apps/android-kotlin/app/build/
+apps/android-kotlin/local.properties
+apps/android-kotlin/.idea/
+
+# Xcode (LDButtonDemo, PostHogDemo, experimentation)
+xcuserdata/
+*.xcuserstate
+DerivedData/
+.build/
+
+# Gradle / Android Studio (android-button-demo)
+android-button-demo/.gradle/
+android-button-demo/build/
+android-button-demo/app/build/
+android-button-demo/local.properties
+android-button-demo/.idea/
+
+# Local Claude Code settings
+**/.claude/settings.local.json
