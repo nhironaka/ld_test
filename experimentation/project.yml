@@ -1,0 +1,43 @@
+name: ExperimentationDemo
+options:
+  bundleIdPrefix: com.launchdarkly
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+
+packages:
+  LaunchDarkly:
+    url: https://github.com/launchdarkly/ios-client-sdk
+    from: "11.0.0"
+
+targets:
+  ExperimentationDemo:
+    type: application
+    platform: iOS
+    sources:
+      - path: Sources
+    info:
+      path: Sources/Info.plist
+      properties:
+        UILaunchStoryboardName: ""
+        CFBundleName: ExperimentationDemo
+        CFBundleIdentifier: com.launchdarkly.ExperimentationDemo
+        CFBundleVersion: "1"
+        CFBundleShortVersionString: "1.0"
+    dependencies:
+      - package: LaunchDarkly
+    settings:
+      base:
+        SWIFT_VERSION: "5.9"
+        PRODUCT_BUNDLE_IDENTIFIER: com.launchdarkly.ExperimentationDemo
+        TARGETED_DEVICE_FAMILY: "1,2"
+        CODE_SIGNING_ALLOWED: "NO"
+        CODE_SIGN_IDENTITY: ""
+
+schemes:
+  ExperimentationDemo:
+    build:
+      targets:
+        ExperimentationDemo: all
+    run:
+      config: Debug

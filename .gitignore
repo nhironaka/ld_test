@@ -37,3 +37,6 @@ android-button-demo/.idea/
 
 # Local Claude Code settings
 **/.claude/settings.local.json
+
+# Real SDK keys, kept out of git
+.local-credentials.md
