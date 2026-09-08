@@ -110,7 +110,7 @@ The apps were checked as far as the local toolchain allows:
 | `apps/ruby-sinatra` | `bundle install` succeeds, `bundle exec rake test` passes (4 tests) |
 | `apps/dotnet-api` | not compiled — no `dotnet` on this machine |
 | `apps/php-slim` | not linted — no `php` on this machine |
-| `apps/android-kotlin` | not built — no Gradle wrapper checked in for it |
+| `apps/android-kotlin` | `./gradlew :app:assembleDebug` succeeds (Gradle 8.14.4, JDK 17) |
 | `LDButtonDemo` | `xcodebuild` succeeds for the iOS Simulator |
 | `experimentation` | `xcodebuild` succeeds for the iOS Simulator |
 | `android-button-demo` | `./gradlew :app:assembleDebug` succeeds; no LaunchDarkly left on `debugRuntimeClasspath` |

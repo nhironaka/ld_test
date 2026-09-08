@@ -40,3 +40,6 @@ android-button-demo/.idea/
 
 # Real SDK keys, kept out of git
 .local-credentials.md
+
+# Kotlin compiler session files
+.kotlin/
