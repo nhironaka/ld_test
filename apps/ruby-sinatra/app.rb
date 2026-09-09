@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "json"
+require "logger"
 require "sinatra/base"
 
 require_relative "lib/feature_flags"
@@ -13,7 +14,9 @@ module DarkStore
     set :show_exceptions, false
 
     configure do
-      set :flags, FeatureFlags.new(logger: nil)
+      # The flag client logs its own connection state, so give it somewhere
+      # to go rather than swallowing it.
+      set :flags, FeatureFlags.new(logger: Logger.new($stderr))
     end
 
     helpers do

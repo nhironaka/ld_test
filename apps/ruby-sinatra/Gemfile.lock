@@ -2,10 +2,35 @@ GEM
   remote: https://rubygems.org/
   specs:
     base64 (0.3.0)
+    benchmark (0.5.0)
+    concurrent-ruby (1.3.8)
+    domain_name (0.6.20260902)
+    http (6.0.4)
+      http-cookie (~> 1.0)
+      llhttp (~> 0.6.1)
+    http-cookie (1.1.6)
+      domain_name (~> 0.5)
+    json (2.21.2)
+    launchdarkly-server-sdk (8.16.0)
+      benchmark (~> 0.1, >= 0.1.1)
+      concurrent-ruby (~> 1.1)
+      http (>= 4.4.0, < 7.0.0)
+      json (~> 2.3)
+      ld-eventsource (= 2.6.0)
+      observer (~> 0.1.2)
+      openssl (>= 3.1.2, < 5.0)
+      semantic (~> 1.6)
+      zlib (~> 3.1)
+    ld-eventsource (2.6.0)
+      concurrent-ruby (~> 1.0)
+      http (>= 4.4.1, < 7.0.0)
+    llhttp (0.6.2)
     logger (1.7.0)
     minitest (5.27.0)
     mustermann (3.1.1)
     nio4r (2.7.5)
+    observer (0.1.2)
+    openssl (4.0.2)
     puma (6.6.1)
       nio4r (~> 2.0)
     rack (3.2.7)
@@ -21,6 +46,7 @@ GEM
     rackup (2.3.1)
       rack (>= 3)
     rake (13.4.2)
+    semantic (1.6.1)
     sinatra (4.2.1)
       logger (>= 1.6.0)
       mustermann (~> 3.0)
@@ -29,12 +55,14 @@ GEM
       rack-session (>= 2.0.0, < 3)
       tilt (~> 2.0)
     tilt (2.9.0)
+    zlib (3.2.3)
 
 PLATFORMS
   arm64-darwin-25
   ruby
 
 DEPENDENCIES
+  launchdarkly-server-sdk (~> 8.16)
   minitest (~> 5.25)
   puma (~> 6.4)
   rack-test (~> 2.1)
@@ -44,10 +72,21 @@ DEPENDENCIES
 
 CHECKSUMS
   base64 (0.3.0) sha256=27337aeabad6ffae05c265c450490628ef3ebd4b67be58257393227588f5a97b
+  benchmark (0.5.0) sha256=465df122341aedcb81a2a24b4d3bd19b6c67c1530713fd533f3ff034e419236c
+  concurrent-ruby (1.3.8) sha256=b2f1be836e968ccc78ccfce277ea79c72a88633f22306782c16ff23fb415d1e1
+  domain_name (0.6.20260902) sha256=4fac7f8e0a77dc85ec02f6534fdeff38e143d434ab8a86528fe68ca5bc45a042
+  http (6.0.4) sha256=3768f902489ea8309424f1881c668af8d3ca73675648a755dfe2cb0030d42d26
+  http-cookie (1.1.6) sha256=ba4b82be64de61dc281243dac70e3c382c45142f20268ed9276a3670c93feaa9
+  json (2.21.2) sha256=1f1d3b7cf2b3ba1a69beca0bb6db13d5438b80bff3cd54cdaaa620b9b07c1c6a
+  launchdarkly-server-sdk (8.16.0) sha256=68404f4dedc570b53b08464a00153e78c836c632262f5f5f447693d54484efb7
+  ld-eventsource (2.6.0) sha256=e70b34226972d3c729c92787de7f342de08340f7249393aa8b1d4b4e3f0b062d
+  llhttp (0.6.2) sha256=3c3c59aafb1e1594ab2f45293478f697458f5a91eb0f0db4b27f61a064024982
   logger (1.7.0) sha256=196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203
   minitest (5.27.0) sha256=2d3b17f8a36fe7801c1adcffdbc38233b938eb0b4966e97a6739055a45fa77d5
   mustermann (3.1.1) sha256=4c6170c7234d5499c345562ba7c7dfe73e1754286dcc1abb053064d66a127198
   nio4r (2.7.5) sha256=6c90168e48fb5f8e768419c93abb94ba2b892a1d0602cb06eef16d8b7df1dca1
+  observer (0.1.2) sha256=d8a3107131ba661138d748e7be3dbafc0d82e732fffba9fccb3d7829880950ac
+  openssl (4.0.2) sha256=1037ad2868ae58df9ad917891c0c0f9815a1172f6846d4bcdd508e4c2ee747c2
   puma (6.6.1) sha256=b9b56e4a4ea75d1bfa6d9e1972ee2c9f43d0883f011826d914e8e37b3694ea1e
   rack (3.2.7) sha256=93e13e1c24f93556671d85d2d79fa228c3485815c50d7e2f265b5330c6528fb7
   rack-protection (4.2.1) sha256=cf6e2842df8c55f5e4d1a4be015e603e19e9bc3a7178bae58949ccbb58558bac
@@ -55,8 +94,10 @@ CHECKSUMS
   rack-test (2.2.0) sha256=005a36692c306ac0b4a9350355ee080fd09ddef1148a5f8b2ac636c720f5c463
   rackup (2.3.1) sha256=6c79c26753778e90983761d677a48937ee3192b3ffef6bc963c0950f94688868
   rake (13.4.2) sha256=cb825b2bd5f1f8e91ca37bddb4b9aaf345551b4731da62949be002fa89283701
+  semantic (1.6.1) sha256=3cdbb48f59198ebb782a3fdfb87b559e0822a311610db153bae22777a7d0c163
   sinatra (4.2.1) sha256=b7aeb9b11d046b552972ade834f1f9be98b185fa8444480688e3627625377080
   tilt (2.9.0) sha256=da5735d0280bba96e9a91041bb14aee435ccad5c17b0fa519249ae543d9aa3a5
+  zlib (3.2.3) sha256=5bd316698b32f31a64ab910a8b6c282442ca1626a81bbd6a1674e8522e319c20
 
 RUBY VERSION
   ruby 4.0.5
