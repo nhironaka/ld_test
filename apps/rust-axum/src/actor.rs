@@ -1,11 +1,8 @@
 use axum::http::HeaderMap;
 
 /// The caller, reduced to the attributes a targeting rule would plausibly
-/// want. Built once per request from forwarded auth headers.
-///
-/// The fields are unread while `Flags` returns constants; drop the `allow`
-/// once they feed a real evaluation context.
-#[allow(dead_code)]
+/// want. Built once per request from forwarded auth headers, and mapped onto a
+/// LaunchDarkly `user` context by `Flags::context_for`.
 #[derive(Debug, Clone)]
 pub struct Actor {
     pub key: String,

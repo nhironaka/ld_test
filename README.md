@@ -5,10 +5,10 @@ correctly wire a LaunchDarkly SDK into an app it has never seen. Every app
 under `apps/` is a working, idiomatic project in its ecosystem, and started out
 with no LaunchDarkly SDK installed. That is the point.
 
-Two of them now have one: `apps/ruby-sinatra` and `apps/dotnet-api` were
-installed into, so they double as a second answer key alongside the demos. Their
-pre-install state is commit `510b98c`; the remaining six apps are untouched
-fixtures.
+Three of them now have one: `apps/ruby-sinatra`, `apps/dotnet-api`, and
+`apps/rust-axum` were installed into, so they double as a second answer key
+alongside the demos. The Ruby and .NET pre-install state is commit `510b98c`;
+the remaining five apps are untouched fixtures.
 
 The well-trodden path (TypeScript / Node / React) is deliberately absent.
 There is no `package.json` anywhere in this repo, so nothing can fall back to

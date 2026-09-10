@@ -2,12 +2,13 @@
 name = "darkstore-api"
 version = "0.1.0"
 edition = "2021"
-rust-version = "1.75"
+rust-version = "1.95"
 publish = false
 
 [dependencies]
 anyhow = "1"
 axum = "0.8"
+launchdarkly-server-sdk = "3"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tokio = { version = "1", features = ["macros", "rt-multi-thread", "signal"] }
