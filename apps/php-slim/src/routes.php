@@ -17,12 +17,12 @@ return static function (App $app, FeatureFlags $flags): void {
             ->withStatus($status);
     };
 
-    $app->get('/health', static fn (
+    $app->get('/health', fn (
         ServerRequestInterface $request,
         ResponseInterface $response
     ): ResponseInterface => $json($response, ['status' => 'ok']));
 
-    $app->get('/api/storefront', static function (
+    $app->get('/api/storefront', function (
         ServerRequestInterface $request,
         ResponseInterface $response
     ) use ($flags, $json): ResponseInterface {
@@ -34,7 +34,7 @@ return static function (App $app, FeatureFlags $flags): void {
         ]);
     });
 
-    $app->post('/api/cart/items', static function (
+    $app->post('/api/cart/items', function (
         ServerRequestInterface $request,
         ResponseInterface $response
     ) use ($flags, $json): ResponseInterface {
