@@ -2,7 +2,7 @@ using DarkStore.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<IFeatureFlags, StaticFeatureFlags>();
+builder.Services.AddFeatureFlags(builder.Configuration);
 
 var app = builder.Build();
 
