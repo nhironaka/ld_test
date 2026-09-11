@@ -7,14 +7,9 @@ namespace DarkStore\Support;
 use Psr\Log\LoggerInterface;
 
 /**
- * Hardcoded defaults. The intent is to replace this with an implementation
- * that consults a remote flag evaluation service, keyed off the current
- * request's actor, so we can roll changes out gradually instead of shipping a
- * deploy per toggle.
- *
- * Note that PHP has no long-lived process to hold a streaming connection, so
- * whatever replaces this needs a shared store (or a sidecar) rather than
- * polling on every request.
+ * Hardcoded defaults, used when no SDK key is configured. When one is,
+ * `src/bootstrap.php` binds {@see LaunchDarklyFeatureFlags} instead, and the
+ * constants below become the values it falls back to.
  */
 final class StaticFeatureFlags implements FeatureFlags
 {
@@ -29,16 +24,16 @@ final class StaticFeatureFlags implements FeatureFlags
 
     public function checkoutRedesign(Actor $actor): bool
     {
-        return false;
+        return FeatureFlagDefaults::CHECKOUT_REDESIGN;
     }
 
     public function bannerCopy(Actor $actor): string
     {
-        return 'Free shipping on orders over $50';
+        return FeatureFlagDefaults::BANNER_COPY;
     }
 
     public function maxCartItems(Actor $actor): int
     {
-        return 25;
+        return FeatureFlagDefaults::MAX_CART_ITEMS;
     }
 }

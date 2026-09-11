@@ -5,10 +5,11 @@ correctly wire a LaunchDarkly SDK into an app it has never seen. Every app
 under `apps/` is a working, idiomatic project in its ecosystem, and started out
 with no LaunchDarkly SDK installed. That is the point.
 
-Two of them now have one: `apps/ruby-sinatra` and `apps/dotnet-api` were
-installed into, so they double as a second answer key alongside the demos. Their
-pre-install state is commit `510b98c`; the remaining six apps are untouched
-fixtures.
+Three of them now have one: `apps/ruby-sinatra` and `apps/dotnet-api` were
+installed into first, then `apps/php-slim`, so they double as a second answer
+key alongside the demos. The pre-install state of the first two is commit
+`510b98c`, and of `apps/php-slim` is commit `d206bef`; the remaining five apps
+are untouched fixtures.
 
 The well-trodden path (TypeScript / Node / React) is deliberately absent.
 There is no `package.json` anywhere in this repo, so nothing can fall back to
@@ -86,10 +87,11 @@ the hardcoded returns, and keep the app building.
   from `IConfiguration` (`LaunchDarkly:SdkKey`), not from an env var read
   directly.
 - **php-slim** — the hardest runtime model: PHP has no long-lived process to
-  hold a streaming connection, so a correct install needs a persistent store
-  or a sidecar rather than per-request polling. The SDK also requires the
-  `apcu` extension from version 6.6 on. Dependencies are container-bound in
-  `src/bootstrap.php`.
+  hold a streaming connection, so the SDK fetches a flag per evaluation and a
+  latency-sensitive install needs a Relay Proxy or a cache that outlives the
+  request. The `apcu` extension is optional, not required: `LDClient` uses it
+  for a stable instance id when present, and only throws if you explicitly set
+  `apc_expiration`. Dependencies are container-bound in `src/bootstrap.php`.
 - **android-kotlin** — a client-side SDK, not server-side. Dependencies must
   go through the version catalog (`gradle/libs.versions.toml`), not inline in
   `app/build.gradle.kts`. Initialization happens in `Application.onCreate`
@@ -114,7 +116,7 @@ The apps were checked as far as the local toolchain allows:
 | `apps/rust-axum` | builds, runs, all endpoints verified by hand, `cargo clippy` clean |
 | `apps/ruby-sinatra` | `bundle exec rake test` passes (4 tests). With the SDK installed, `bundle install` needs the zlib and openssl gems, so the install itself was resolved (`bundle lock`) but not compiled where it was written |
 | `apps/dotnet-api` | `dotnet build` clean with `TreatWarningsAsErrors`, runs, all endpoints verified by hand with and without an SDK key |
-| `apps/php-slim` | not linted — no `php` on this machine |
+| `apps/php-slim` | every route returned 500 until commit `85dba04`: Slim binds route handlers to the container with `Closure::bindTo`, which returns `null` for a `static` closure, so its `: callable` return type threw. `tests/StorefrontTest.php` was failing with it. Now lints clean and serves; verified by hand with no key, with an unreachable LaunchDarkly, and against served variations |
 | `apps/android-kotlin` | `./gradlew :app:assembleDebug` succeeds (Gradle 8.14.4, JDK 17) |
 | `LDButtonDemo` | `xcodebuild` succeeds for the iOS Simulator |
 | `experimentation` | `xcodebuild` succeeds for the iOS Simulator |
@@ -126,9 +128,10 @@ tooling's fault.
 
 `Gemfile.lock` and `Cargo.lock` are committed, as they would be in a real
 application, so a correct install has to update the lockfile as well as the
-manifest. `apps/php-slim` has no `composer.lock` yet only because there is no
-PHP toolchain here to generate one. The iOS demos likewise have no
-`Package.resolved` — installing a Swift package creates one.
+manifest. `apps/php-slim` still has no `composer.lock`: there is a PHP toolchain
+here now, but packagist is unreachable from it, so `composer install` cannot
+resolve one and a handwritten lockfile would be a fiction. The iOS demos
+likewise have no `Package.resolved` — installing a Swift package creates one.
 
 ## A note on keys
 

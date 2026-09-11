@@ -6,6 +6,10 @@
     "require": {
         "php": ">=8.2",
         "ext-json": "*",
+        "guzzlehttp/guzzle": "^7.9",
+        "kevinrob/guzzle-cache-middleware": "^7.0",
+        "launchdarkly/server-sdk": "^6.8",
+        "monolog/monolog": "^3.5",
         "php-di/php-di": "^7.0",
         "nyholm/psr7": "^1.8",
         "nyholm/psr7-server": "^1.1",
