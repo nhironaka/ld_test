@@ -2,13 +2,8 @@
 
 `apps/` is a fixture monorepo for testing whether tooling can install and
 correctly wire a LaunchDarkly SDK into an app it has never seen. Every app
-under `apps/` is a working, idiomatic project in its ecosystem, and started out
-with no LaunchDarkly SDK installed. That is the point.
-
-Two of them now have one: `apps/ruby-sinatra` and `apps/dotnet-api` were
-installed into, so they double as a second answer key alongside the demos. Their
-pre-install state is commit `510b98c`; the remaining six apps are untouched
-fixtures.
+under `apps/` is a working, idiomatic project in its ecosystem — and none of
+them have a LaunchDarkly SDK installed. That is the point.
 
 The well-trodden path (TypeScript / Node / React) is deliberately absent.
 There is no `package.json` anywhere in this repo, so nothing can fall back to
@@ -112,8 +107,8 @@ The apps were checked as far as the local toolchain allows:
 | App | Status |
 | --- | --- |
 | `apps/rust-axum` | builds, runs, all endpoints verified by hand, `cargo clippy` clean |
-| `apps/ruby-sinatra` | `bundle exec rake test` passes (4 tests). With the SDK installed, `bundle install` needs the zlib and openssl gems, so the install itself was resolved (`bundle lock`) but not compiled where it was written |
-| `apps/dotnet-api` | `dotnet build` clean with `TreatWarningsAsErrors`, runs, all endpoints verified by hand with and without an SDK key |
+| `apps/ruby-sinatra` | `bundle install` succeeds, `bundle exec rake test` passes (4 tests) |
+| `apps/dotnet-api` | not compiled — no `dotnet` on this machine |
 | `apps/php-slim` | not linted — no `php` on this machine |
 | `apps/android-kotlin` | `./gradlew :app:assembleDebug` succeeds (Gradle 8.14.4, JDK 17) |
 | `LDButtonDemo` | `xcodebuild` succeeds for the iOS Simulator |

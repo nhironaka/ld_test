@@ -2,22 +2,9 @@ using DarkStore.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// LaunchDarkly when a key is configured; hardcoded defaults when it is not, so
-// the service still starts and serves in environments without a key.
-if (string.IsNullOrWhiteSpace(builder.Configuration["LaunchDarkly:SdkKey"]))
-{
-    builder.Services.AddSingleton<IFeatureFlags, StaticFeatureFlags>();
-}
-else
-{
-    builder.Services.AddSingleton<IFeatureFlags, LaunchDarklyFeatureFlags>();
-}
+builder.Services.AddSingleton<IFeatureFlags, StaticFeatureFlags>();
 
 var app = builder.Build();
-
-// Build the flag client during startup rather than on the first request that
-// needs a flag, so its connect-and-wait is not paid by a customer.
-_ = app.Services.GetRequiredService<IFeatureFlags>();
 
 app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
 

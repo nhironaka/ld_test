@@ -1,32 +1,6 @@
 namespace DarkStore.Api;
 
 /// <summary>
-/// The values served when no flag service can answer: no SDK key configured,
-/// no connection yet, the flag is missing, or its variation has an unexpected
-/// type. They are what the service returned before LaunchDarkly was installed.
-/// </summary>
-public static class FeatureFlagDefaults
-{
-    public const bool CheckoutRedesign = false;
-
-    public const string BannerCopy = "Free shipping on orders over $50";
-
-    public const int MaxCartItems = 25;
-}
-
-/// <summary>
-/// The flag keys this service evaluates. See FLAGS.md at the repository root.
-/// </summary>
-public static class FeatureFlagKeys
-{
-    public const string CheckoutRedesign = "checkout-redesign";
-
-    public const string BannerCopy = "banner-copy";
-
-    public const string MaxCartItems = "max-cart-items";
-}
-
-/// <summary>
 /// Central seam for every runtime feature decision in the service. Registered
 /// as a singleton, so implementations must be thread-safe and cheap to call
 /// on the request path.
@@ -44,9 +18,10 @@ public interface IFeatureFlags : IAsyncDisposable
 }
 
 /// <summary>
-/// Hardcoded defaults, used when no <c>LaunchDarkly:SdkKey</c> is configured.
-/// <see cref="LaunchDarklyFeatureFlags"/> is the implementation that consults
-/// LaunchDarkly; <c>Program.cs</c> picks between them at startup.
+/// Hardcoded defaults. The intent is to replace this with an implementation
+/// that consults a remote flag evaluation service, keyed off the current
+/// request's actor, so we can roll changes out gradually instead of shipping
+/// a deploy per toggle.
 /// </summary>
 public sealed class StaticFeatureFlags : IFeatureFlags
 {
@@ -62,11 +37,11 @@ public sealed class StaticFeatureFlags : IFeatureFlags
         }
     }
 
-    public bool CheckoutRedesign(Actor actor) => FeatureFlagDefaults.CheckoutRedesign;
+    public bool CheckoutRedesign(Actor actor) => false;
 
-    public string BannerCopy(Actor actor) => FeatureFlagDefaults.BannerCopy;
+    public string BannerCopy(Actor actor) => "Free shipping on orders over $50";
 
-    public int MaxCartItems(Actor actor) => FeatureFlagDefaults.MaxCartItems;
+    public int MaxCartItems(Actor actor) => 25;
 
     /// <summary>
     /// Runs on host shutdown so any buffered analytics are flushed before the
